@@ -15,12 +15,11 @@ class RestClient {
 
   factory RestClient({
     required String baseUrl,
-    required Future<String?> Function() token,
     int connectionTimeout = 30000,
     int receiveTimeout = 30000,
   }) {
     _instance.baseUrl = baseUrl;
-    _instance.token = token;
+    // _instance.token = token;
     _instance.connectionTimeout = connectionTimeout;
     _instance.receiveTimeout = receiveTimeout;
 
@@ -38,7 +37,6 @@ class RestClient {
   late int connectionTimeout;
   late int receiveTimeout;
   late String baseUrl;
-  late Future<String?> Function() token;
 
   Future<Response<dynamic>> get(
     APIType apiType,
@@ -302,14 +300,9 @@ class RestClient {
   }
 
   Future<Options> _getOptions(APIType api) async {
-    String? token = await this.token();
-
     switch (api) {
       case APIType.public:
         return PublicApiOptions().options;
-
-      case APIType.protected:
-        return ProtectedApiOptions(token!).options;
 
       default:
         return PublicApiOptions().options;

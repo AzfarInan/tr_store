@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:tr_store/src/core/route/tr_store_routes.dart';
 import 'package:tr_store/src/core/widgets/button.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -32,7 +33,7 @@ class SplashScreen extends StatelessWidget {
             const Spacer(),
             Button(
               onPressed: () {
-                // Navigator.pushNamed(context, WalletAppRoute.onBoardingScreen);
+                Navigator.pushNamed(context, TRStoreRoute.productList);
               },
               label: "Continue",
               borderRadius: 50.sp,

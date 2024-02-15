@@ -2,7 +2,7 @@ part of 'rest_client.dart';
 
 /// PUBLIC => Generic API url without access token
 /// PROTECTED => Generic API url with access token
-enum APIType { public, protected }
+enum APIType { public }
 
 abstract class ApiOptions {
   Options options = Options();
