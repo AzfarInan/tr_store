@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tr_store/src/core/widgets/button.dart';
@@ -11,20 +12,20 @@ class SplashScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Spacer(),
             Padding(
-              padding: const EdgeInsets.all(32.0),
+              padding: EdgeInsets.all(32.w),
               child: Lottie.asset('assets/animations/splash_animation.json'),
             ),
             Text(
               'TR Store',
               textAlign: TextAlign.center,
               style: GoogleFonts.montserrat(
-                fontSize: 32,
+                fontSize: 32.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -34,9 +35,9 @@ class SplashScreen extends StatelessWidget {
                 // Navigator.pushNamed(context, WalletAppRoute.onBoardingScreen);
               },
               label: "Continue",
-              borderRadius: 50,
+              borderRadius: 50.sp,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
           ],
         ),
       ),
