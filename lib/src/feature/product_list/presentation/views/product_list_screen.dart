@@ -33,9 +33,34 @@ class ProductListState extends ConsumerState<ProductListScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        /// TODO: Call API
+        await notifier.getProductList();
       },
       child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text(
+            'Products',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.teal,
+          elevation: 0,
+          actions: [
+            CircleAvatar(
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.shopping_cart_outlined,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            SizedBox(width: 16.w),
+          ],
+        ),
         body: SafeArea(
           child: state.status == Status.loading
               ? const ProductListShimmer()
@@ -47,7 +72,6 @@ class ProductListState extends ConsumerState<ProductListScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20.h),
                       GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
