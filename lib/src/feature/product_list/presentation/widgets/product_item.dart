@@ -15,57 +15,67 @@ class ProductItems extends StatelessWidget {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(
-              color: Colors.grey.shade300,
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12.r),
-                  topRight: Radius.circular(12.r),
-                ),
-                child: Image.network(
-                  product.thumbnail!,
-                  height: 150.h,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+        InkWell(
+          onTap: () {
+            /// Navigate to Product Details Page
+            Navigator.pushNamed(
+              context,
+              TRStoreRoute.productDetails,
+              arguments: product.id!,
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(
+                color: Colors.grey.shade300,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey.shade300,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12.r),
+                    topRight: Radius.circular(12.r),
+                  ),
+                  child: Image.network(
+                    product.thumbnail!,
+                    height: 150.h,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                height: 1.w,
-                width: double.infinity,
-              ),
-              Padding(
-                padding: EdgeInsets.all(6.w),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        product.title!,
-                        maxLines: 2,
-                        style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey.shade300,
+                    ),
+                  ),
+                  height: 1.w,
+                  width: double.infinity,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(6.w),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          product.title!,
+                          maxLines: 2,
+                          style: TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         Positioned(

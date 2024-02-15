@@ -4,28 +4,28 @@ import 'package:tr_store/src/core/services/network_service/network/api.dart';
 import 'package:tr_store/src/core/services/network_service/network/rest_client.dart';
 import 'package:tr_store/src/core/services/network_service/network/rest_client_provider.dart';
 
-abstract class ProductListDataSource {
-  Future<Response> getProductList();
+abstract class ProductDetailsDataSource {
+  Future<Response> getProductDetails({required int productId});
 }
 
-class ProductListDataSourceImpl implements ProductListDataSource {
-  const ProductListDataSourceImpl({required this.restClient});
+class ProductDetailsDataSourceImpl implements ProductDetailsDataSource {
+  const ProductDetailsDataSourceImpl({required this.restClient});
 
   final RestClient restClient;
 
   @override
-  Future<Response> getProductList() async {
+  Future<Response> getProductDetails({required int productId}) async {
     final response = await restClient.get(
       APIType.public,
-      API.productList,
+      "${API.productList}/$productId",
     );
 
     return response;
   }
 }
 
-final productListDataSourceProvider = Provider<ProductListDataSource>(
-  (ref) => ProductListDataSourceImpl(
+final productDetailsDataSourceProvider = Provider<ProductDetailsDataSource>(
+  (ref) => ProductDetailsDataSourceImpl(
     restClient: ref.read(networkProvider),
   ),
 );

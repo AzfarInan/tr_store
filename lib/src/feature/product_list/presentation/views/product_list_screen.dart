@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tr_store/src/core/base/base_state.dart';
+import 'package:tr_store/src/core/route/tr_store_routes.dart';
 import 'package:tr_store/src/feature/product_list/data/model/product_list_model.dart';
 import 'package:tr_store/src/feature/product_list/presentation/provider/product_list_provider.dart';
 
