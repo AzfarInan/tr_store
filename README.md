@@ -2,6 +2,8 @@
 
 TR Store is a Flutter E-Commerce Dummy Project. Where user can see products and their details. User
 can add products to cart and see the cart details. Products will be saved locally for offline usage.
+Data will be shown from Local DB after getting data from API. User can refresh data from API
+anytime by pulling down to refresh.
 
 ## Configuration:
 - Flutter: 3.16.9
