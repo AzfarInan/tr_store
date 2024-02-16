@@ -25,6 +25,19 @@ class ShoppingCartState extends ConsumerState<ShoppingCartScreen> {
     ref.listen(shoppingCartNotifierProvider, (previous, next) {
       if (next.status == Status.success) {
         setState(() {});
+      } else if (next.status == Status.error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              next.message!,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+              ),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     });
 
@@ -65,7 +78,9 @@ class ShoppingCartState extends ConsumerState<ShoppingCartScreen> {
                     itemCount: notifier.shoppingCart.length,
                     itemBuilder: (context, index) {
                       return _CartItem(
-                        product: notifier.shoppingCart[index].product!,
+                        product: Product.fromModel(
+                          notifier.shoppingCart[index],
+                        ),
                       );
                     },
                     separatorBuilder: (context, index) {
@@ -101,7 +116,7 @@ class ShoppingCartState extends ConsumerState<ShoppingCartScreen> {
                       duration: const Duration(milliseconds: 500),
                       content: Center(
                         child: Text(
-                          'Order Confirmed!',
+                          'Order Placed!',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16.sp,

@@ -161,12 +161,29 @@ class SQLHelper {
     return cartDB.query('cart');
   }
 
-  static Future<void> removeItemFromCart(int id) async {
+  static Future<Map<String, dynamic>> getSingleCartItem(int id) async {
     final cartDB = await SQLHelper.cartDb();
-    await cartDB.delete(
+    final result = await cartDB.query(
       'cart',
       where: 'id = ?',
       whereArgs: [id],
+      limit: 1,
     );
+
+    if (result.isEmpty) {
+      await cartDB.delete(
+        'cart',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+      return {};
+    }
+
+    return result.first;
+  }
+
+  static Future<void> clearCart() async {
+    final cartDB = await SQLHelper.cartDb();
+    await cartDB.delete('cart');
   }
 }

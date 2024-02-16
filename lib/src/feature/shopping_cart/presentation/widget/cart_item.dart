@@ -83,13 +83,29 @@ class _CartItemState extends ConsumerState<_CartItem> {
                             color: Colors.teal,
                           ),
                         ),
-                        Text(
-                          notifier.getQuantity(widget.product).toString(),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        FutureBuilder(
+                          future: notifier.getQuantity(widget.product),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Text(
+                                "0",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              );
+                            }
+                            return Text(
+                              snapshot.data.toString(),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            );
+                          },
                         ),
                         IconButton(
                           onPressed: () {

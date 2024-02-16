@@ -38,6 +38,13 @@ class Product {
         userId: json["userId"],
       );
 
+  factory Product.fromModel(ProductWithQuantity product) => Product(
+        id: product.id,
+        title: product.title,
+        thumbnail: product.thumbnail,
+        userId: product.userId,
+      );
+
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
@@ -49,19 +56,34 @@ class Product {
 }
 
 class ProductWithQuantity {
-  Product? product;
+  final int? id;
+  final String? title;
+  final String? thumbnail;
+  final int? userId;
   int? quantity;
 
-  ProductWithQuantity({this.product, this.quantity});
+  ProductWithQuantity({
+    this.id,
+    this.title,
+    this.thumbnail,
+    this.userId,
+    this.quantity = 0,
+  });
 
   factory ProductWithQuantity.fromJson(Map<String, dynamic> json) =>
       ProductWithQuantity(
-        product: Product.fromJson(json["product"]),
+        id: json["id"],
+        title: json["title"],
+        thumbnail: json["thumbnail"],
+        userId: json["userId"],
         quantity: json["quantity"],
       );
 
   Map<String, dynamic> toJson() => {
-        "product": product!.toJson(),
+        "id": id,
+        "title": title,
+        "thumbnail": thumbnail,
+        "userId": userId,
         "quantity": quantity,
       };
 }
