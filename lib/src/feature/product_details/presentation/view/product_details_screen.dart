@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tr_store/src/core/base/base_state.dart';
+import 'package:tr_store/src/core/widgets/app_bar.dart';
 import 'package:tr_store/src/core/widgets/button.dart';
 import 'package:tr_store/src/feature/product_details/presentation/provider/product_details_provider.dart';
 import 'package:tr_store/src/feature/product_list/data/model/product_list_model.dart';
@@ -42,30 +43,7 @@ class ProductDetailsState extends ConsumerState<ProductDetailsScreen> {
         await notifier.getProductDetails(productId: widget.productId);
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Details',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 24,
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.teal,
-          elevation: 0,
-          actions: [
-            CircleAvatar(
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            SizedBox(width: 16.w),
-          ],
-        ),
+        appBar: const TRStoreAppBar(title: 'Details'),
         body: SafeArea(
           child: state.status == Status.loading
               ? const _ProductDetailsShimmer()

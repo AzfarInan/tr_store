@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tr_store/src/core/base/base_state.dart';
 import 'package:tr_store/src/core/route/tr_store_routes.dart';
+import 'package:tr_store/src/core/widgets/app_bar.dart';
 import 'package:tr_store/src/feature/product_list/data/model/product_list_model.dart';
 import 'package:tr_store/src/feature/product_list/presentation/provider/product_list_provider.dart';
 
@@ -37,30 +38,9 @@ class ProductListState extends ConsumerState<ProductListScreen> {
         await notifier.getProductList();
       },
       child: Scaffold(
-        appBar: AppBar(
+        appBar: const TRStoreAppBar(
+          title: 'Products',
           automaticallyImplyLeading: false,
-          title: const Text(
-            'Products',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 24,
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.teal,
-          elevation: 0,
-          actions: [
-            CircleAvatar(
-              child: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            SizedBox(width: 16.w),
-          ],
         ),
         body: SafeArea(
           child: state.status == Status.loading
