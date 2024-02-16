@@ -79,8 +79,8 @@ class _CartItemState extends ConsumerState<_CartItem> {
                             notifier.decreaseItem(widget.product);
                           },
                           icon: const Icon(
-                            Icons.remove,
-                            color: Colors.black,
+                            Icons.remove_circle_outlined,
+                            color: Colors.teal,
                           ),
                         ),
                         Text(
@@ -89,6 +89,15 @@ class _CartItemState extends ConsumerState<_CartItem> {
                             color: Colors.black,
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            notifier.addToCart(widget.product);
+                          },
+                          icon: const Icon(
+                            Icons.add_circle_outlined,
+                            color: Colors.teal,
                           ),
                         ),
                       ],

@@ -33,7 +33,7 @@ class ShoppingCartState extends ConsumerState<ShoppingCartScreen> {
         title: 'Shopping Cart',
         showShoppingCart: false,
       ),
-      body: notifier.cartMap.isEmpty
+      body: notifier.shoppingCart.isEmpty
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -62,10 +62,10 @@ class ShoppingCartState extends ConsumerState<ShoppingCartScreen> {
                   ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: notifier.cartMap.length,
+                    itemCount: notifier.shoppingCart.length,
                     itemBuilder: (context, index) {
                       return _CartItem(
-                        product: notifier.cartMap[index].keys.first,
+                        product: notifier.shoppingCart[index].product!,
                       );
                     },
                     separatorBuilder: (context, index) {

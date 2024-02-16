@@ -47,3 +47,21 @@ class Product {
         "userId": userId,
       };
 }
+
+class ProductWithQuantity {
+  Product? product;
+  int? quantity;
+
+  ProductWithQuantity({this.product, this.quantity});
+
+  factory ProductWithQuantity.fromJson(Map<String, dynamic> json) =>
+      ProductWithQuantity(
+        product: Product.fromJson(json["product"]),
+        quantity: json["quantity"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "product": product!.toJson(),
+        "quantity": quantity,
+      };
+}

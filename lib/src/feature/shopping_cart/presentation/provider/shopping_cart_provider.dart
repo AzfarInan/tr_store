@@ -11,7 +11,7 @@ final shoppingCartNotifierProvider =
 class ShoppingCartNotifier extends Notifier<BaseState> {
   ShoppingCartNotifier() : super();
 
-  List<Map<Product, int>> cartMap = [];
+  List<ProductWithQuantity> shoppingCart = [];
 
   @override
   BaseState build() {
@@ -19,29 +19,37 @@ class ShoppingCartNotifier extends Notifier<BaseState> {
   }
 
   void addToCart(Product product) {
-    int count = 0;
-    for (var item in cartMap) {
-      if (item.containsKey(product)) {
-        count++;
-        item[product] = item[product]! + 1;
-      }
-    }
+    if (shoppingCart.isEmpty) {
+      shoppingCart.add(ProductWithQuantity(product: product, quantity: 1));
+    } else {
+      int count = 0;
 
-    if (count == 0) {
-      cartMap.add({product: 1});
+      for (var item in shoppingCart) {
+        if (item.product!.id == product.id) {
+          count++;
+          item.quantity = item.quantity! + 1;
+
+          /// Break the loop after first find
+          break;
+        }
+      }
+
+      if (count == 0) {
+        shoppingCart.add(ProductWithQuantity(product: product, quantity: 1));
+      }
     }
 
     updateCartLength();
     state = BaseState().copyWith(
       status: Status.success,
-      data: cartMap,
+      data: shoppingCart,
     );
   }
 
   int getQuantity(Product product) {
-    for (var item in cartMap) {
-      if (item.containsKey(product)) {
-        return item[product]!;
+    for (var item in shoppingCart) {
+      if (item.product!.id == product.id) {
+        return item.quantity!;
       }
     }
     return 0;
@@ -52,10 +60,10 @@ class ShoppingCartNotifier extends Notifier<BaseState> {
       status: Status.loading,
     );
 
-    for (var item in cartMap) {
-      if (item.containsKey(product)) {
-        if (item[product]! > 1) {
-          item[product] = item[product]! - 1;
+    for (var item in shoppingCart) {
+      if (item.product!.id == product.id) {
+        if (item.quantity! > 1) {
+          item.quantity = item.quantity! - 1;
         } else {
           removeFromCart(product);
         }
@@ -69,41 +77,47 @@ class ShoppingCartNotifier extends Notifier<BaseState> {
     updateCartLength();
     state = BaseState().copyWith(
       status: Status.success,
-      data: cartMap,
+      data: shoppingCart,
     );
   }
 
   void removeFromCart(Product product) {
-    cartMap.removeWhere((element) => element.containsKey(product));
+    state = BaseState().copyWith(
+      status: Status.loading,
+    );
+
+    shoppingCart.removeWhere((element) => element.product!.id == product.id);
 
     getQuantity(product);
     updateCartLength();
     state = BaseState().copyWith(
       status: Status.success,
-      data: cartMap,
+      data: shoppingCart,
     );
   }
 
   void clearCart() {
-    cartMap.clear();
+    state = BaseState().copyWith(
+      status: Status.loading,
+    );
+
+    shoppingCart.clear();
     updateCartLength();
     state = BaseState().copyWith(
       status: Status.success,
-      data: cartMap,
+      data: shoppingCart,
     );
   }
 
   void updateCartLength() {
-    cartLength.value = cartMap.length;
+    cartLength.value = shoppingCart.length;
     totalCartValue();
   }
 
   int totalCartValue() {
     int total = 0;
-    for (var item in cartMap) {
-      item.forEach((key, value) {
-        total += key.userId! * value;
-      });
+    for (var item in shoppingCart) {
+      total += item.product!.userId! * item.quantity!;
     }
 
     return total;
