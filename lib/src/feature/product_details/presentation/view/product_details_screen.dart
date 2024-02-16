@@ -7,6 +7,7 @@ import 'package:tr_store/src/core/widgets/app_bar.dart';
 import 'package:tr_store/src/core/widgets/button.dart';
 import 'package:tr_store/src/feature/product_details/presentation/provider/product_details_provider.dart';
 import 'package:tr_store/src/feature/product_list/data/model/product_list_model.dart';
+import 'package:tr_store/src/feature/shopping_cart/presentation/provider/shopping_cart_provider.dart';
 
 part '../widgets/product_details.dart';
 part '../widgets/product_header.dart';
@@ -93,9 +94,13 @@ class ProductDetailsState extends ConsumerState<ProductDetailsScreen> {
                     Expanded(
                       child: Button(
                         onPressed: () {
+                          ref
+                              .read(shoppingCartNotifierProvider.notifier)
+                              .addToCart(notifier.product!);
                           // Show SnackBar
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
+                              duration: const Duration(milliseconds: 500),
                               content: Center(
                                 child: Text(
                                   'Added to cart',

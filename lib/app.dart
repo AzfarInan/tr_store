@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tr_store/src/core/route/route_generator.dart';
 
+ValueNotifier<int> cartLength = ValueNotifier<int>(0);
 GlobalKey<NavigatorState>? navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends ConsumerStatefulWidget {
@@ -31,22 +32,11 @@ class _MyAppState extends ConsumerState<MyApp> {
               alignment: Alignment.center,
               children: [
                 child!,
-                // ValueListenableBuilder(
-                //   valueListenable: showLoading,
-                //   builder: (context, value, child) {
-                //     return showLoading.value
-                //         ? SpinKitFadingCircle(
-                //             color: context.theme.color.burntSienna,
-                //             size: 60.sp,
-                //           )
-                //         : Container();
-                //   },
-                // ),
               ],
             );
           },
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.teal,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
         );

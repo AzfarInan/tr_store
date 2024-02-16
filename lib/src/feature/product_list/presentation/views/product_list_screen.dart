@@ -7,6 +7,7 @@ import 'package:tr_store/src/core/route/tr_store_routes.dart';
 import 'package:tr_store/src/core/widgets/app_bar.dart';
 import 'package:tr_store/src/feature/product_list/data/model/product_list_model.dart';
 import 'package:tr_store/src/feature/product_list/presentation/provider/product_list_provider.dart';
+import 'package:tr_store/src/feature/shopping_cart/presentation/provider/shopping_cart_provider.dart';
 
 part '../widgets/product_list_shimmer.dart';
 part '../widgets/product_item.dart';
@@ -25,6 +26,7 @@ class ProductListState extends ConsumerState<ProductListScreen> {
 
     Future.delayed(Duration.zero, () {
       ref.read(productListNotifierProvider.notifier).getProductList();
+      ref.read(shoppingCartNotifierProvider.notifier).updateCartLength();
     });
   }
 
@@ -46,10 +48,7 @@ class ProductListState extends ConsumerState<ProductListScreen> {
           child: state.status == Status.loading
               ? const ProductListShimmer()
               : SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 20.h,
-                  ),
+                  padding: EdgeInsets.all(16.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

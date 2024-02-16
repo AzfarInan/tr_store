@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tr_store/app.dart';
 
-class TRStoreAppBar extends StatelessWidget implements PreferredSizeWidget {
+class TRStoreAppBar extends ConsumerStatefulWidget
+    implements PreferredSizeWidget {
   const TRStoreAppBar({
     super.key,
     required this.title,
@@ -14,25 +17,57 @@ class TRStoreAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showShoppingCart;
 
   @override
+  TRStoreAppBarState createState() => TRStoreAppBarState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class TRStoreAppBarState extends ConsumerState<TRStoreAppBar> {
+  @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
-        title,
+        widget.title,
         style: const TextStyle(
           color: Colors.black,
           fontSize: 24,
         ),
       ),
-      actions: showShoppingCart
+      actions: widget.showShoppingCart
           ? [
-              CircleAvatar(
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.shopping_cart_outlined,
-                    color: Colors.black,
+              Stack(
+                children: [
+                  CircleAvatar(
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.shopping_cart_outlined,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
-                ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: CircleAvatar(
+                      radius: 8,
+                      backgroundColor: Colors.red,
+                      child: ValueListenableBuilder(
+                        valueListenable: cartLength,
+                        builder: (context, value, child) {
+                          return Text(
+                            value.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(width: 16.w),
             ]
@@ -40,10 +75,7 @@ class TRStoreAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: Colors.teal,
       elevation: 0.h,
-      automaticallyImplyLeading: automaticallyImplyLeading,
+      automaticallyImplyLeading: widget.automaticallyImplyLeading,
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

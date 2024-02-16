@@ -1,6 +1,6 @@
 part of '../views/product_list_screen.dart';
 
-class ProductItems extends StatelessWidget {
+class ProductItems extends ConsumerStatefulWidget {
   const ProductItems({
     super.key,
     required this.product,
@@ -10,6 +10,11 @@ class ProductItems extends StatelessWidget {
   final Product product;
   final int index;
 
+  @override
+  ProductItemsState createState() => ProductItemsState();
+}
+
+class ProductItemsState extends ConsumerState<ProductItems> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -21,7 +26,7 @@ class ProductItems extends StatelessWidget {
             Navigator.pushNamed(
               context,
               TRStoreRoute.productDetails,
-              arguments: product.id!,
+              arguments: widget.product.id!,
             );
           },
           child: Container(
@@ -41,7 +46,7 @@ class ProductItems extends StatelessWidget {
                     topRight: Radius.circular(12.r),
                   ),
                   child: Image.network(
-                    product.thumbnail!,
+                    widget.product.thumbnail!,
                     height: 150.h,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -62,7 +67,7 @@ class ProductItems extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          product.title!,
+                          widget.product.title!,
                           maxLines: 2,
                           style: TextStyle(
                             overflow: TextOverflow.ellipsis,
@@ -84,9 +89,14 @@ class ProductItems extends StatelessWidget {
           child: CircleAvatar(
             child: IconButton(
               onPressed: () {
-                // Show SnackBar
+                ref
+                    .read(shoppingCartNotifierProvider.notifier)
+                    .addToCart(widget.product);
+
+                /// Show SnackBar
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
+                    duration: const Duration(milliseconds: 500),
                     content: Center(
                       child: Text(
                         'Added to cart',
