@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:tr_store/src/core/base/base_state.dart';
 import 'package:tr_store/src/core/services/database_service/sql_helper.dart';
 import 'package:tr_store/src/core/services/network_service/utils/error_model.dart';
@@ -42,6 +43,15 @@ class ProductDetailsNotifier extends Notifier<BaseState> {
   }
 
   Future<void> getProductDetailsFromAPI({required int productId}) async {
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (!result) {
+      state = BaseState().copyWith(
+        status: Status.noInternet,
+        message: 'No Internet Connection!',
+      );
+      return;
+    }
+
     state = BaseState.loading();
 
     try {

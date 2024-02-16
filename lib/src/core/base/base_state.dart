@@ -2,12 +2,14 @@ enum Status {
   initial,
   loading,
   success,
-  error;
+  error,
+  noInternet;
 
   bool get isInitial => this == Status.initial;
   bool get isLoading => this == Status.loading;
   bool get isSuccess => this == Status.success;
   bool get isError => this == Status.error;
+  bool get isNoInternet => this == Status.noInternet;
 }
 
 class BaseState<T> {

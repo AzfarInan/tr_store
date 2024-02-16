@@ -48,6 +48,23 @@ class ProductListState extends ConsumerState<ProductListScreen> {
     final notifier = ref.watch(productListNotifierProvider.notifier);
     final state = ref.watch(productListNotifierProvider);
 
+    ref.listen(productListNotifierProvider, (previous, next) {
+      if (next.status == Status.noInternet) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              next.message!,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+              ),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+
     return RefreshIndicator(
       onRefresh: () async {
         await notifier.getProductListFromAPI();

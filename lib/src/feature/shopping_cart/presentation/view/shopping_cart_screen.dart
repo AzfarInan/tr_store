@@ -25,7 +25,7 @@ class ShoppingCartState extends ConsumerState<ShoppingCartScreen> {
     ref.listen(shoppingCartNotifierProvider, (previous, next) {
       if (next.status == Status.success) {
         setState(() {});
-      } else if (next.status == Status.error) {
+      } else if (next.status == Status.noInternet) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(

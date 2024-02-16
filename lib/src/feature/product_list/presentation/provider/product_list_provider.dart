@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:tr_store/src/core/base/base_state.dart';
 import 'package:tr_store/src/core/services/database_service/sql_helper.dart';
 import 'package:tr_store/src/core/services/network_service/utils/error_model.dart';
@@ -69,43 +70,53 @@ class ProductListNotifier extends Notifier<BaseState> {
   }
 
   Future<void> getProductListFromAPI() async {
-    state = BaseState.loading();
+    bool result = await InternetConnectionChecker().hasConnection;
 
-    try {
-      ErrorModel? errorModel;
-      ProductList? data;
+    if (!result) {
+      state = BaseState().copyWith(
+        status: Status.noInternet,
+        message: 'No Internet Connection!',
+      );
+      return;
+    } else {
+      state = BaseState.loading();
 
-      (errorModel, data) = await useCase();
+      try {
+        ErrorModel? errorModel;
+        ProductList? data;
 
-      if (errorModel != null) {
+        (errorModel, data) = await useCase();
+
+        if (errorModel != null) {
+          state = BaseState().copyWith(
+            status: Status.error,
+            data: errorModel,
+          );
+        }
+
+        if (data != null) {
+          List<Map<String, dynamic>> _dataFromDB = [];
+          _dataFromDB = data.products!.map((e) => e.toJson()).toList();
+
+          _dataFromDB.forEach((element) async {
+            await SQLHelper.insert(element);
+          });
+
+          page = 1;
+          productList.clear();
+          getProductListFromDataBase();
+
+          state = BaseState().copyWith(
+            status: Status.success,
+            data: productList,
+          );
+        }
+      } on Exception catch (e) {
         state = BaseState().copyWith(
           status: Status.error,
-          data: errorModel,
+          message: e.toString(),
         );
       }
-
-      if (data != null) {
-        List<Map<String, dynamic>> _dataFromDB = [];
-        _dataFromDB = data.products!.map((e) => e.toJson()).toList();
-
-        _dataFromDB.forEach((element) async {
-          await SQLHelper.insert(element);
-        });
-
-        page = 1;
-        productList.clear();
-        getProductListFromDataBase();
-
-        state = BaseState().copyWith(
-          status: Status.success,
-          data: productList,
-        );
-      }
-    } on Exception catch (e) {
-      state = BaseState().copyWith(
-        status: Status.error,
-        message: e.toString(),
-      );
     }
   }
 }

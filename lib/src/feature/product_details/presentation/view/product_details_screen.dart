@@ -41,6 +41,23 @@ class ProductDetailsState extends ConsumerState<ProductDetailsScreen> {
     final notifier = ref.watch(productDetailsNotifierProvider.notifier);
     final state = ref.watch(productDetailsNotifierProvider);
 
+    ref.listen(productDetailsNotifierProvider, (previous, next) {
+      if (next.status == Status.noInternet) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              next.message!,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+              ),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+
     return RefreshIndicator(
       onRefresh: () async {
         await notifier.getProductDetailsFromAPI(productId: widget.productId);
