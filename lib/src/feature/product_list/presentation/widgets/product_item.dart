@@ -45,8 +45,8 @@ class ProductItemsState extends ConsumerState<ProductItems> {
                     topLeft: Radius.circular(12.r),
                     topRight: Radius.circular(12.r),
                   ),
-                  child: Image.network(
-                    widget.product.thumbnail!,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.product.thumbnail!,
                     height: 150.h,
                     width: double.infinity,
                     fit: BoxFit.cover,

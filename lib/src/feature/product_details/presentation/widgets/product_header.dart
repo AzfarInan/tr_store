@@ -23,8 +23,8 @@ class _ProductHeader extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
-              child: Image.network(
-                product!.image!,
+              child: CachedNetworkImage(
+                imageUrl: product!.image!,
                 height: 200.h,
                 width: double.infinity,
                 fit: BoxFit.cover,
