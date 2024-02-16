@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:tr_store/src/core/base/base_state.dart';
+import 'package:tr_store/src/core/widgets/button.dart';
 import 'package:tr_store/src/feature/product_details/presentation/provider/product_details_provider.dart';
+import 'package:tr_store/src/feature/product_list/data/model/product_list_model.dart';
+
+part '../widgets/product_details.dart';
+part '../widgets/product_header.dart';
+part '../widgets/product_details_shimmer.dart';
 
 class ProductDetailsScreen extends ConsumerStatefulWidget {
   const ProductDetailsScreen({super.key, required this.productId});
@@ -36,7 +43,6 @@ class ProductDetailsState extends ConsumerState<ProductDetailsScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           title: const Text(
             'Details',
             style: TextStyle(
@@ -62,18 +68,85 @@ class ProductDetailsState extends ConsumerState<ProductDetailsScreen> {
         ),
         body: SafeArea(
           child: state.status == Status.loading
-              ? const CircularProgressIndicator()
-              : SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 20.h,
-                  ),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [],
-                  ),
+              ? const _ProductDetailsShimmer()
+              : CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      automaticallyImplyLeading: false,
+                      backgroundColor: Colors.transparent,
+                      elevation: 0.0,
+                      pinned: true,
+                      floating: true,
+                      snap: true,
+                      expandedHeight: 300.h,
+                      collapsedHeight: 300.h,
+                      flexibleSpace: _ProductHeader(
+                        product: notifier.product,
+                      ),
+                    ),
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      fillOverscroll: true,
+                      child: _ProductDetails(
+                        product: notifier.product,
+                      ),
+                    ),
+                  ],
                 ),
         ),
+        bottomNavigationBar: state.status == Status.loading
+            ? const SizedBox()
+            : Container(
+                decoration: BoxDecoration(color: Colors.teal.shade50),
+                padding: EdgeInsets.all(16.w),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '\$${notifier.product!.userId}.00',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Button(
+                        onPressed: () {
+                          // Show SnackBar
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Center(
+                                child: Text(
+                                  'Added to cart',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
+                              ),
+                              backgroundColor: Colors.black,
+                            ),
+                          );
+                        },
+                        borderRadius: 12.r,
+                        label: 'Add to Cart',
+                        textStyle: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                        prefix: const Icon(
+                          Icons.add_shopping_cart,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
       ),
     );
   }
