@@ -43,7 +43,7 @@ class ProductDetailsState extends ConsumerState<ProductDetailsScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        await notifier.getProductDetails(productId: widget.productId);
+        await notifier.getProductDetailsFromAPI(productId: widget.productId);
       },
       child: Scaffold(
         appBar: const TRStoreAppBar(title: 'Details'),

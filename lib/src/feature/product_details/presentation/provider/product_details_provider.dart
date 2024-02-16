@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tr_store/src/core/base/base_state.dart';
+import 'package:tr_store/src/core/services/database_service/sql_helper.dart';
 import 'package:tr_store/src/core/services/network_service/utils/error_model.dart';
 import 'package:tr_store/src/feature/product_details/domain/use_case/get_product_details_use_case.dart';
 import 'package:tr_store/src/feature/product_list/data/model/product_list_model.dart';
@@ -18,10 +19,29 @@ class ProductDetailsNotifier extends Notifier<BaseState> {
   @override
   BaseState build() {
     useCase = ref.read(getProductDetailsUseCaseProvider);
-    return BaseState.initial();
+    BaseState.initial();
+    return BaseState.loading();
   }
 
   Future<void> getProductDetails({required int productId}) async {
+    final data = await SQLHelper.getProductById(productId);
+
+    if (data.isNotEmpty) {
+      getProductDetailsFromDataBase(data);
+    } else {
+      getProductDetailsFromAPI(productId: productId);
+    }
+  }
+
+  Future<void> getProductDetailsFromDataBase(Map<String, dynamic> p) async {
+    product = Product.fromJson(p);
+    state = BaseState().copyWith(
+      status: Status.success,
+      data: product,
+    );
+  }
+
+  Future<void> getProductDetailsFromAPI({required int productId}) async {
     state = BaseState.loading();
 
     try {
