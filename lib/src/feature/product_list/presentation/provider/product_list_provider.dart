@@ -20,6 +20,7 @@ class ProductListNotifier extends Notifier<BaseState> {
 
   @override
   BaseState build() {
+    useCase = ref.read(getProductListUseCaseProvider);
     return BaseState.initial();
   }
 
@@ -38,7 +39,6 @@ class ProductListNotifier extends Notifier<BaseState> {
       return;
     }
 
-    state = BaseState.loading();
     try {
       final data = await SQLHelper.getData(page: page);
 
@@ -92,8 +92,14 @@ class ProductListNotifier extends Notifier<BaseState> {
           await SQLHelper.insert(element);
         });
 
+        page = 1;
         productList.clear();
         getProductListFromDataBase();
+
+        state = BaseState().copyWith(
+          status: Status.success,
+          data: productList,
+        );
       }
     } on Exception catch (e) {
       state = BaseState().copyWith(

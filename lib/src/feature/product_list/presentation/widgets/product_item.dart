@@ -26,7 +26,7 @@ class ProductItemsState extends ConsumerState<ProductItems> {
             Navigator.pushNamed(
               context,
               TRStoreRoute.productDetails,
-              arguments: widget.product.id!,
+              arguments: widget.product.userId!,
             );
           },
           child: Container(

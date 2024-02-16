@@ -39,8 +39,8 @@ class _CartItemState extends ConsumerState<_CartItem> {
                 topLeft: Radius.circular(12.r),
                 bottomLeft: Radius.circular(12.r),
               ),
-              child: Image.network(
-                widget.product.thumbnail!,
+              child: CachedNetworkImage(
+                imageUrl: widget.product.thumbnail!,
                 height: 100.h,
                 width: 100.w,
                 fit: BoxFit.cover,

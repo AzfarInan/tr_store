@@ -6,6 +6,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tr_store/src/core/base/base_state.dart';
 import 'package:tr_store/src/core/route/tr_store_routes.dart';
 import 'package:tr_store/src/core/widgets/app_bar.dart';
+import 'package:tr_store/src/core/widgets/error_screen.dart';
 import 'package:tr_store/src/feature/product_list/data/model/product_list_model.dart';
 import 'package:tr_store/src/feature/product_list/presentation/provider/product_list_provider.dart';
 import 'package:tr_store/src/feature/shopping_cart/presentation/provider/shopping_cart_provider.dart';
@@ -21,6 +22,8 @@ class ProductListScreen extends ConsumerStatefulWidget {
 }
 
 class ProductListState extends ConsumerState<ProductListScreen> {
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +31,15 @@ class ProductListState extends ConsumerState<ProductListScreen> {
     Future.delayed(Duration.zero, () {
       ref.read(productListNotifierProvider.notifier).getProductList();
       ref.read(shoppingCartNotifierProvider.notifier).updateCartLength();
+    });
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        ref
+            .read(productListNotifierProvider.notifier)
+            .getProductListFromDataBase();
+      }
     });
   }
 
@@ -38,7 +50,7 @@ class ProductListState extends ConsumerState<ProductListScreen> {
 
     return RefreshIndicator(
       onRefresh: () async {
-        await notifier.getProductList();
+        await notifier.getProductListFromAPI();
       },
       child: Scaffold(
         appBar: const TRStoreAppBar(
@@ -48,31 +60,35 @@ class ProductListState extends ConsumerState<ProductListScreen> {
         body: SafeArea(
           child: state.status == Status.loading
               ? const ProductListShimmer()
-              : SingleChildScrollView(
-                  padding: EdgeInsets.all(16.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: notifier.productList.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 16.w,
-                          mainAxisSpacing: 16.h,
-                          childAspectRatio: 0.8,
-                        ),
-                        itemBuilder: (context, index) {
-                          return ProductItems(
-                            product: notifier.productList[index],
-                            index: index,
-                          );
-                        },
+              : state.status == Status.error
+                  ? const ErrorScreen()
+                  : SingleChildScrollView(
+                      controller: _scrollController,
+                      padding: EdgeInsets.all(16.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: notifier.productList.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 16.w,
+                              mainAxisSpacing: 16.h,
+                              childAspectRatio: 0.8,
+                            ),
+                            itemBuilder: (context, index) {
+                              return ProductItems(
+                                product: notifier.productList[index],
+                                index: index,
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
+                    ),
         ),
       ),
     );

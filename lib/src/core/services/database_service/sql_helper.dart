@@ -39,14 +39,14 @@ class SQLHelper {
       final offset = (page - 1) * 10;
       return db.query(
         'products',
-        orderBy: 'id DESC',
+        orderBy: 'id ASC',
         limit: 10,
         offset: offset,
       );
     } else {
       return db.query(
         'products',
-        orderBy: 'id DESC',
+        orderBy: 'id ASC',
       );
     }
   }

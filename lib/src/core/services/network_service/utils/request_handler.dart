@@ -8,8 +8,8 @@ extension FutureResponseExtension on Future<Response> {
       final response = await this;
 
       return (null, parse(response.data) as T);
-    } on Failure catch (e) {
-      ErrorModel errorModel = ErrorModel.fromJson(e.error);
+    } on Failure {
+      ErrorModel errorModel = ErrorModel();
 
       return (errorModel, null);
     }
