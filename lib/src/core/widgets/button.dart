@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Button extends StatelessWidget {
   const Button({
@@ -93,12 +93,11 @@ class Button extends StatelessWidget {
                 : prefix == null
                     ? Text(
                         label,
-                        style: textStyle ??
-                            GoogleFonts.montserrat(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       )
                     : Row(
                         children: [
@@ -106,12 +105,11 @@ class Button extends StatelessWidget {
                           const SizedBox(width: 10),
                           Text(
                             label,
-                            style: textStyle ??
-                                GoogleFonts.archivo(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
                           ),
                         ],
                       ),

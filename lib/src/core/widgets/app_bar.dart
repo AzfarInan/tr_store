@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tr_store/app.dart';
+import 'package:tr_store/src/core/route/tr_store_routes.dart';
 
 class TRStoreAppBar extends ConsumerStatefulWidget
     implements PreferredSizeWidget {
@@ -40,7 +41,12 @@ class TRStoreAppBarState extends ConsumerState<TRStoreAppBar> {
                 children: [
                   CircleAvatar(
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        /// Navigate to shopping cart screen
+                        Navigator.of(context).pushNamed(
+                          TRStoreRoute.shoppingCart,
+                        );
+                      },
                       icon: const Icon(
                         Icons.shopping_cart_outlined,
                         color: Colors.black,
