@@ -41,6 +41,7 @@ dependencies:
   shimmer: ^3.0.0
   lottie: ^3.0.0
   dio: ^5.4.0
+  sqflite: ^2.3.2
 
 dev_dependencies:
   flutter_test:
